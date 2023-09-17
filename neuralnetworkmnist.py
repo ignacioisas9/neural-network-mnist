@@ -29,7 +29,7 @@ model = tf.keras.models.Sequential([
 
 model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
 
-model.fit(x_train, y_train, epochs=30, validation_split=0.2)
+model.fit(x_train, y_train, epochs=5, validation_split=0.2)
 
 model.save('handwritten.model')
 
@@ -43,18 +43,18 @@ print(accuracy)
 image_folder = 0
 image_number = 1
 coincidences = 0
-total_images = 46
+total_images = 50
 
 for image_folder in range(10):
     print(f"Número: {image_folder}")
     while os.path.isfile(f"digits/{image_folder}/digit{image_number}.png"):
         try:
             img = cv2.imread(f"digits/{image_folder}/digit{image_number}.png")[:,:,0]
-            img = np.invert(np.array([img]))
+            img = np.array([img])
             prediction = model.predict(img)
             print(f"Este numero es probablemente un {np.argmax(prediction)}")
-            plt.imshow(img[0], cmap=plt.cm.binary)
-            plt.show()
+            # plt.imshow(img[0], cmap=plt.cm.binary)
+            # plt.show()
             if np.argmax(prediction) == image_folder:
                 coincidences += 1
                 precision = coincidences/total_images
